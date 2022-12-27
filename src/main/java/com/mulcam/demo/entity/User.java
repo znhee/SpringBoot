@@ -12,6 +12,12 @@ public class User {
 	
 	public User() {}
 	
+	public User(String uid, String uname, String email) {
+		this.uid = uid;
+		this.uname = uname;
+		this.email = email;
+	}
+
 	public User(String uid, String pwd, String uname, String email) {
 		this.uid = uid;
 		this.pwd = pwd;
@@ -27,6 +33,7 @@ public class User {
 		this.regDate = regDate;
 		this.isDeleted = isDeleted;
 	}
+
 	@Override
 	public String toString() {
 		return "User [uid=" + uid + ", pwd=" + pwd + ", uname=" + uname + ", email=" + email + ", regDate=" + regDate
