@@ -10,11 +10,13 @@
 <body>
 	<h3>업로드된 파일</h3>
 	<hr>
+	<h4>메세지: ${msg}</h4>
 	<ul>
 	<c:forEach var="file" items="${uploadFiles}">
 		<li>
 			${file.fileName}
 			<a href="/file/download?fileName=${file.fileName}">[Download]</a>
+			${file.contentType}
 		</li>
 	</c:forEach>
 	</ul>
