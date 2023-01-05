@@ -34,7 +34,7 @@ public class MapController {
 	@Value("${naver.accessId}") private String accessId;
 	@Value("${naver.secretKey}") private String secretKey;
 	@Value("${roadAddrKey}") private String roadAddrKey;
-	
+ 	
 	@GetMapping("/staticMap")
 	public String staticForm() {
 		return "map/staticForm";
