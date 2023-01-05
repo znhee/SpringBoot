@@ -5,7 +5,7 @@ import java.util.List;
 public class CsvTest {
 
 	public static void main(String[] args) {
-		CsvUtil cu = new CsvUtil();
+		CsvUtil cu = new CsvUtilImpl();
 		List<List<String>> list = cu.readCsv("/tmp/sample.csv", ",", 1);
 		for (List<String> row: list) {
 			for (String s: row)

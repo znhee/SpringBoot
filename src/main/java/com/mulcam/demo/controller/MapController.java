@@ -12,6 +12,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ import com.mulcam.demo.service.MapUtil;
 @RequestMapping("/map")
 public class MapController {
 
+	@Autowired private CsvUtil csvUtil;
 	@Value("${naver.accessId}") private String accessId;
 	@Value("${naver.secretKey}") private String secretKey;
 	@Value("${roadAddrKey}") private String roadAddrKey;
@@ -160,34 +162,31 @@ public class MapController {
 			dataList.add(row);
 		}
 		
-		CsvUtil cu = new CsvUtil();
-		cu.writeCsv(filename, dataList);
+//		CsvUtil cu = new CsvUtil();
+		csvUtil.writeCsv(filename, dataList);
 		return "redirect:/map/hotPlacesResult";
 	}
 	
 	@GetMapping("/hotPlacesResult")
 	public String hotPlacesResult(Model model) throws Exception {
-		CsvUtil cu = new CsvUtil();
-		List<List<String>> dataList = cu.readCsv("/tmp/광진구명소.csv");
+//		CsvUtil cu = new CsvUtil();
+		List<List<String>> dataList = csvUtil.readCsv("/tmp/광진구명소.csv");
 		String marker = "";
 		double lngSum = 0.0, latSum = 0.0;
-		// "type:t|size:tiny|pos:127.0824 37.5383|label:광진구청|color:red";
+		// "type:t|size:tiny|pos:127.0824 37.5383|label:광진구청|color:red"
 		for (List<String> list: dataList) {
 			double lng = Double.parseDouble(list.get(2));
 			double lat = Double.parseDouble(list.get(3));
 			lngSum += lng; latSum += lat;
-			marker += "&markers=" + "type:t|size:tiny|pos:" + lng + "%20" + lat + "|label:"
+			marker += "&markers=type:t|size:tiny|pos:" + lng + "%20" + lat + "|label:"
 					+ URLEncoder.encode(list.get(0), "utf-8") + "|color:red";
 		}
 		double lngCenter = lngSum / dataList.size();
 		double latCenter = latSum / dataList.size();
-		
 		String url = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster"
-				+ "?w=" + 600
-				+ "&h=" + 400
+				+ "?w=" + 600 + "&h=" + 400
 				+ "&center=" + lngCenter + "," + latCenter
-				+ "&level=" + 12
-				+ "&scale=" + 2
+				+ "&level=" + 12 + "&scale=" + 2
 				+ "&X-NCP-APIGW-API-KEY-ID=" + accessId
 				+ "&X-NCP-APIGW-API-KEY=" + secretKey;
 		
@@ -195,6 +194,4 @@ public class MapController {
 		return "map/staticResult";
 	}
 	
-	
 }
-
