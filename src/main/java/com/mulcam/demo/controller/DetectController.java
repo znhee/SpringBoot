@@ -13,6 +13,7 @@ import java.net.URLConnection;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,9 +25,8 @@ public class DetectController {
 	@Value("${naver.accessId}") private String accessId;
 	@Value("${naver.secretKey}") private String secretKey;
 	
-	@ResponseBody
 	@GetMapping("/naver")
-	public String naver() throws Exception {
+	public String naver(Model model) throws Exception {
 		String apiURL = "https://naveropenapi.apigw.ntruss.com/vision-obj/v1/detect"; // 객체 인식
 		File uploadFile = new File("/tmp/yolo-test.jpeg");
 		
@@ -79,9 +79,9 @@ public class DetectController {
  			sb.append(line);
  		br.close();
  		
- 		
- 		
-		return sb.toString();
+ 		model.addAttribute("fileName", fileName);
+ 		model.addAttribute("jsonResult", sb.toString());
+		return "detect/naverResult";
 	}
 }
 
